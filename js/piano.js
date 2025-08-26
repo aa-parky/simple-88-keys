@@ -1,3 +1,10 @@
+// Full list of 88 piano keys from A0 (MIDI 21) to C8 (MIDI 108)
+// Each key has:
+// - `note`: scientific pitch notation (e.g., C4)
+// - `type`: white or black key (used for layout & styling)
+// - `octave`: number for display label shifting
+// - `midi`: corresponding MIDI note number
+
 const keys = [
   { note: "A0", type: "white", octave: 0, midi: 21 },
   { note: "A#0", type: "black", octave: 0, midi: 22 },
@@ -89,8 +96,16 @@ const keys = [
   { note: "C8", type: "white", octave: 8, midi: 108 },
 ];
 
+// Shift used to relabel Middle C (MIDI 60) as C3, C4, or C5
+// -1 = C3 (Yamaha, Logic), 0 = C4 (General MIDI), +1 = C5 (notation software)
 let middleCShift = -1; // Default: MIDI 60 = C3
 
+/**
+ * Main function to render the keyboard based on current settings
+ * - Clears and rebuilds the DOM inside #keyboard
+ * - Highlights MIDI 60 (Middle C)
+ * - Adjusts note labels according to selected convention
+ */
 function generateKeyboard() {
   const keyboard = document.getElementById("keyboard");
   keyboard.innerHTML = "";
@@ -98,24 +113,29 @@ function generateKeyboard() {
   const whiteKeys = keys.filter((k) => k.type === "white");
   const blackKeys = keys.filter((k) => k.type === "black");
 
+  // Generate white keys first (they define the base layout)
   whiteKeys.forEach((key) => {
     const keyElement = document.createElement("div");
     keyElement.className = "white-key";
     keyElement.setAttribute("data-note", key.note);
     keyElement.setAttribute("data-octave", key.octave);
 
+    // Highlight Middle C (MIDI 60) visually
     if (key.midi === 60) keyElement.classList.add("middle-c");
 
+    // Create and assign label with adjusted octave
     const label = document.createElement("span");
     label.className = "key-label";
     const labelOctave = key.octave + middleCShift;
     label.textContent = key.note.replace(/\d+$/, labelOctave);
     keyElement.appendChild(label);
-
+    // Append to keyboard container
     keyboard.appendChild(keyElement);
   });
 
+  // Generate black keys (positioned absolutely on top of white keys)
   blackKeys.forEach((key) => {
+    // Count how many white keys appear before this black key
     const keysBefore = keys.slice(0, keys.indexOf(key));
     const whiteKeysBefore = keysBefore.filter((k) => k.type === "white").length;
 
@@ -123,7 +143,7 @@ function generateKeyboard() {
     keyElement.className = "black-key";
     keyElement.setAttribute("data-note", key.note);
     keyElement.setAttribute("data-octave", key.octave);
-
+    // Highlight Middle C if it's a black key (it isn’t, but included for safety)
     if (key.midi === 60) keyElement.classList.add("middle-c");
 
     const label = document.createElement("span");
@@ -131,16 +151,18 @@ function generateKeyboard() {
     const labelOctave = key.octave + middleCShift;
     label.textContent = key.note.replace(/\d+$/, labelOctave);
     keyElement.appendChild(label);
-
+    // Position black key between its neighboring white keys
     keyElement.style.left = whiteKeysBefore * 25 - -6 + "px";
+
+    // Append to keyboard container
     keyboard.appendChild(keyElement);
   });
 }
-
+// Dropdown to toggle how Middle C is labeled (C3, C4, or C5)
 document.getElementById("middleC").addEventListener("change", (e) => {
   const mode = e.target.value;
   middleCShift = mode === "C3" ? -1 : mode === "C4" ? 0 : 1;
   generateKeyboard();
 });
-
+// On first page load, generate the keyboard
 document.addEventListener("DOMContentLoaded", generateKeyboard);
