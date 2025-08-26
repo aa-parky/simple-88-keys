@@ -6,7 +6,7 @@
 
 body {
   font-family: "Arial", sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1c1c1f 0%, #3e3647 100%);
   min-height: 100vh;
   padding: 20px;
   display: flex;
@@ -26,7 +26,8 @@ h1 {
 .piano-container {
   position: relative;
   display: inline-block;
-  background: linear-gradient(145deg, #135c8b, #135c8b);
+  background: linear-gradient(145deg, #183040, #0b344f);
+
   padding: 15px;
   border-radius: 15px;
   box-shadow:
