@@ -6,9 +6,10 @@
     <title>88-Key Piano Keyboard</title>
     <link rel="stylesheet" href="css/layout.css" />
     <link rel="stylesheet" href="css/piano-styles.css" />
+    <link rel="stylesheet" href="css/midonika.css" />
   </head>
   <body>
-    <header>Header</header>
+    <header>Tonika I</header>
 
     <main>
       <!-- Top Tab Group -->
@@ -20,7 +21,7 @@
             <button class="tab-btn" data-tab="3">Tab 3</button>
             <button class="tab-btn" data-tab="4">Tab 4</button>
             <button class="tab-btn" data-tab="5">Tab 5</button>
-            <button class="tab-btn" data-tab="6">Tab 6</button>
+            <button class="tab-btn" data-tab="6">Midi Info</button>
           </div>
 
           <div class="tab-content" data-tab="1">Content for Tab 1</div>
@@ -28,7 +29,9 @@
           <div class="tab-content hidden" data-tab="3">Content for Tab 3</div>
           <div class="tab-content hidden" data-tab="4">Content for Tab 4</div>
           <div class="tab-content hidden" data-tab="5">Content for Tab 5</div>
-          <div class="tab-content hidden" data-tab="6">Content for Tab 6</div>
+          <div class="tab-content hidden" data-tab="6">
+            <div id="midonika-container" class="midonika-wrap"></div>
+          </div>
         </section>
       </section>
 
@@ -48,7 +51,7 @@
               <option value="C3" selected>
                 C3 (Kawai VPC1, Yamaha, Logic)
               </option>
-              <option value="C4">C4 (General MIDI)</option>
+              <option value="C4">C4 (Midonika, General MIDI)</option>
               <option value="C5">C5 (Notation, FL Studio)</option>
             </select>
           </label>
@@ -82,7 +85,21 @@
     </main>
 
     <footer>Footer</footer>
+    <script src="js/midonika.iife.js"></script>
     <script src="js/tabs.js"></script>
     <script src="js/piano.js"></script>
+    <script>
+      const midonikaContainer = document.getElementById("midonika-container");
+      let midonikaApp = null;
+
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tabId = btn.dataset.tab;
+          if (tabId === "6" && !midonikaApp) {
+            midonikaApp = Midonika.createMidonika("#midonika-container");
+          }
+        });
+      });
+    </script>
   </body>
 </html>
