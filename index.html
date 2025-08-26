@@ -36,6 +36,12 @@
       </section>
 
       <section class="piano-wrapper">
+        <label
+          for="midiDeviceSelector"
+          style="display: block; margin-bottom: 4px; font-weight: bold"
+          >🎛 Select MIDI Input:</label
+        >
+        <select id="midiDeviceSelector" style="margin-bottom: 16px"></select>
         <div class="piano-controls">
           <label>
             <input type="checkbox" id="toggleCOnly" />
@@ -88,6 +94,7 @@
     <script src="js/midonika.iife.js"></script>
     <script src="js/tabs.js"></script>
     <script src="js/piano.js"></script>
+    <script src="./js/midibridge.js"></script>
     <script>
       const midonikaContainer = document.getElementById("midonika-container");
       let midonikaApp = null;

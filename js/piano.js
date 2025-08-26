@@ -119,6 +119,7 @@ function generateKeyboard() {
     keyElement.className = "white-key";
     keyElement.setAttribute("data-note", key.note);
     keyElement.setAttribute("data-octave", key.octave);
+    keyElement.setAttribute("data-midi", key.midi); // <-- ADDED
 
     // Highlight Middle C (MIDI 60) visually
     if (key.midi === 60) keyElement.classList.add("middle-c");
@@ -143,6 +144,7 @@ function generateKeyboard() {
     keyElement.className = "black-key";
     keyElement.setAttribute("data-note", key.note);
     keyElement.setAttribute("data-octave", key.octave);
+    keyElement.setAttribute("data-midi", key.midi); // <-- ADDED
     // Highlight Middle C if it's a black key (it isn’t, but included for safety)
     if (key.midi === 60) keyElement.classList.add("middle-c");
 
@@ -190,3 +192,18 @@ toggleAllLabels.addEventListener("change", () => {
     keyboard.classList.remove("hide-all-labels");
   }
 });
+
+/**
+ * External MIDI-friendly interface
+ * Allows external scripts to highlight/unhighlight keys by MIDI number
+ */
+window.PianoInterface = {
+  noteOn(midiNote) {
+    const el = document.querySelector(`[data-midi="${midiNote}"]`);
+    if (el) el.classList.add("active");
+  },
+  noteOff(midiNote) {
+    const el = document.querySelector(`[data-midi="${midiNote}"]`);
+    if (el) el.classList.remove("active");
+  },
+};
