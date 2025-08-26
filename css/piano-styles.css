@@ -1,6 +1,9 @@
 .middle-c-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 5px;
   color: rgb(222, 222, 222);
-  margin-bottom: 10px;
 }
 
 .piano-container {
@@ -202,4 +205,47 @@
 .black-key.middle-c .key-label {
   color: #ff6b6b;
   font-weight: bold;
+}
+
+.piano-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 12px;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.piano-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.piano-controls select {
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #555;
+  line-height: 1;
+  height: 26px;
+  margin-top: 1px;
+}
+
+.keyboard.hide-all-labels .key-label {
+  display: none;
+}
+
+.keyboard.show-c-only .key-label {
+  display: none;
+}
+
+.keyboard.show-c-only .white-key[data-note^="C"] .key-label,
+.keyboard.show-c-only .black-key[data-note^="C"] .key-label {
+  display: block;
 }

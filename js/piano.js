@@ -166,3 +166,27 @@ document.getElementById("middleC").addEventListener("change", (e) => {
 });
 // On first page load, generate the keyboard
 document.addEventListener("DOMContentLoaded", generateKeyboard);
+
+const toggleCOnly = document.getElementById("toggleCOnly");
+const toggleAllLabels = document.getElementById("toggleAllLabels");
+const keyboard = document.getElementById("keyboard");
+
+toggleCOnly.addEventListener("change", () => {
+  if (toggleCOnly.checked) {
+    keyboard.classList.add("show-c-only");
+    toggleAllLabels.checked = false;
+    keyboard.classList.remove("hide-all-labels");
+  } else {
+    keyboard.classList.remove("show-c-only");
+  }
+});
+
+toggleAllLabels.addEventListener("change", () => {
+  if (toggleAllLabels.checked) {
+    keyboard.classList.add("hide-all-labels");
+    toggleCOnly.checked = false;
+    keyboard.classList.remove("show-c-only");
+  } else {
+    keyboard.classList.remove("hide-all-labels");
+  }
+});
