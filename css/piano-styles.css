@@ -23,6 +23,11 @@ h1 {
   font-weight: 300;
 }
 
+.middle-c-label {
+  color: rgb(222, 222, 222);
+  margin-bottom: 10px;
+}
+
 .piano-container {
   position: relative;
   display: inline-block;
