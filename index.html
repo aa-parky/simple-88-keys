@@ -8,18 +8,34 @@
     <link rel="stylesheet" href="css/piano-styles.css" />
   </head>
   <body>
-    <label for="middleC" class="middle-c-label">
-      Middle C Label:
-      <select id="middleC">
-        <option value="C3" selected>C3 (Kawai VPC1,Yamaha, Logic)</option>
-        <option value="C4">C4 (General MIDI)</option>
-        <option value="C5">C5 (Notation, FL Studio)</option>
-      </select>
-    </label>
+    <header>Header</header>
 
-    <div class="piano-container">
-      <div class="keyboard" id="keyboard"></div>
-    </div>
+    <main>
+      <!-- Top Tab Group -->
+      <section class="tab-group">Top Tab Group</section>
+
+      <!-- Piano Section -->
+      <section class="piano-wrapper">
+        <label for="middleC" class="middle-c-label">
+          Middle C Label:
+          <select id="middleC">
+            <option value="C3" selected>C3 (Kawai VPC1, Yamaha, Logic)</option>
+            <option value="C4">C4 (General MIDI)</option>
+            <option value="C5">C5 (Notation, FL Studio)</option>
+          </select>
+        </label>
+
+        <div class="piano-container">
+          <div class="keyboard" id="keyboard"></div>
+        </div>
+      </section>
+
+      <!-- Bottom Tab Group -->
+      <section class="tab-group">Bottom Tab Group</section>
+    </main>
+
+    <footer>Footer</footer>
+
     <script src="js/piano.js"></script>
   </body>
 </html>
