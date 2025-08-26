@@ -21,21 +21,7 @@
     <script>
       // Piano key data - 88 keys from A0 to C8
       const keys = [
-        // Starting partial octave
-        { note: "A0", type: "white", octave: 0 },
-        { note: "A#0", type: "black", octave: 0 },
-        { note: "B0", type: "white", octave: 0 },
-
-        // Full octaves 1-7
-        { note: "C1", type: "white", octave: 1 },
-        { note: "C#1", type: "black", octave: 1 },
-        { note: "D1", type: "white", octave: 1 },
-        { note: "D#1", type: "black", octave: 1 },
-        { note: "E1", type: "white", octave: 1 },
-        { note: "F1", type: "white", octave: 1 },
-        { note: "F#1", type: "black", octave: 1 },
-        { note: "G1", type: "white", octave: 1 },
-        { note: "G#1", type: "black", octave: 1 },
+        // Starting at A1
         { note: "A1", type: "white", octave: 1 },
         { note: "A#1", type: "black", octave: 1 },
         { note: "B1", type: "white", octave: 1 },
@@ -106,20 +92,6 @@
         { note: "B6", type: "white", octave: 6 },
 
         { note: "C7", type: "white", octave: 7 },
-        { note: "C#7", type: "black", octave: 7 },
-        { note: "D7", type: "white", octave: 7 },
-        { note: "D#7", type: "black", octave: 7 },
-        { note: "E7", type: "white", octave: 7 },
-        { note: "F7", type: "white", octave: 7 },
-        { note: "F#7", type: "black", octave: 7 },
-        { note: "G7", type: "white", octave: 7 },
-        { note: "G#7", type: "black", octave: 7 },
-        { note: "A7", type: "white", octave: 7 },
-        { note: "A#7", type: "black", octave: 7 },
-        { note: "B7", type: "white", octave: 7 },
-
-        // Final key
-        { note: "C8", type: "white", octave: 8 },
       ];
 
       function generateKeyboard() {

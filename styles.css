@@ -25,9 +25,7 @@ h1 {
 
 .piano-container {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: inline-block;
   background: linear-gradient(145deg, #135c8b, #135c8b);
   padding: 15px;
   border-radius: 15px;
@@ -35,7 +33,6 @@ h1 {
     0 20px 40px rgba(0, 0, 0, 0.4),
     inset 0 2px 4px rgba(255, 255, 255, 0.1);
   overflow-x: auto;
-  max-width: 95vw;
 }
 
 .keyboard {
@@ -133,66 +130,39 @@ h1 {
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
 }
 
+.white-key[data-note="C1"] .key-label {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.white-key[data-note="C2"] .key-label {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.white-key[data-note="C3"] .key-label {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
 .white-key[data-note="C4"] .key-label {
   color: #ff6b6b;
   font-weight: bold;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .piano-container {
-    padding: 15px;
-  }
-
-  .keyboard {
-    padding: 10px;
-  }
-
-  .white-key {
-    width: 18px;
-    height: 100px;
-  }
-
-  .black-key {
-    width: 12px;
-    height: 65px;
-  }
-
-  .key-label {
-    font-size: 7px;
-    bottom: 5px;
-  }
-
-  .black-key .key-label {
-    font-size: 5px;
-    bottom: 3px;
-  }
-
-  h1 {
-    font-size: 1.8em;
-  }
+.white-key[data-note="C5"] .key-label {
+  color: #ff6b6b;
+  font-weight: bold;
 }
 
-@media (max-width: 480px) {
-  .white-key {
-    width: 14px;
-    height: 80px;
-  }
+.white-key[data-note="C6"] .key-label {
+  color: #ff6b6b;
+  font-weight: bold;
+}
 
-  .black-key {
-    width: 9px;
-    height: 50px;
-  }
-
-  .key-label {
-    font-size: 6px;
-    bottom: 3px;
-  }
-
-  .black-key .key-label {
-    font-size: 4px;
-    bottom: 2px;
-  }
+.white-key[data-note="C7"] .key-label {
+  color: #ff6b6b;
+  font-weight: bold;
 }
 
 /* Animation for key press effect */
