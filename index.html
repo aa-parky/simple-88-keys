@@ -12,7 +12,25 @@
 
     <main>
       <!-- Top Tab Group -->
-      <section class="tab-group">Top Tab Group</section>
+      <section class="tab-group">
+        <section class="tab-group top-tabs">
+          <div class="tab-nav">
+            <button class="tab-btn active" data-tab="1">Tab 1</button>
+            <button class="tab-btn" data-tab="2">Tab 2</button>
+            <button class="tab-btn" data-tab="3">Tab 3</button>
+            <button class="tab-btn" data-tab="4">Tab 4</button>
+            <button class="tab-btn" data-tab="5">Tab 5</button>
+            <button class="tab-btn" data-tab="6">Tab 6</button>
+          </div>
+
+          <div class="tab-content" data-tab="1">Content for Tab 1</div>
+          <div class="tab-content hidden" data-tab="2">Content for Tab 2</div>
+          <div class="tab-content hidden" data-tab="3">Content for Tab 3</div>
+          <div class="tab-content hidden" data-tab="4">Content for Tab 4</div>
+          <div class="tab-content hidden" data-tab="5">Content for Tab 5</div>
+          <div class="tab-content hidden" data-tab="6">Content for Tab 6</div>
+        </section>
+      </section>
 
       <!-- Piano Section -->
       <section class="piano-wrapper">
@@ -31,11 +49,29 @@
       </section>
 
       <!-- Bottom Tab Group -->
-      <section class="tab-group">Bottom Tab Group</section>
+      <section class="tab-group">
+        <section class="tab-group bottom-tabs">
+          <div class="tab-nav">
+            <button class="tab-btn" data-tab="b1">Tab 1</button>
+            <button class="tab-btn" data-tab="b2">Tab 2</button>
+            <button class="tab-btn" data-tab="b3">Tab 3</button>
+            <button class="tab-btn" data-tab="b4">Tab 4</button>
+            <button class="tab-btn" data-tab="b5">Tab 5</button>
+            <button class="tab-btn" data-tab="b6">Tab 6</button>
+          </div>
+
+          <div class="tab-content hidden" data-tab="b1">Content for Tab 1</div>
+          <div class="tab-content hidden" data-tab="b2">Content for Tab 2</div>
+          <div class="tab-content hidden" data-tab="b3">Content for Tab 3</div>
+          <div class="tab-content hidden" data-tab="b4">Content for Tab 4</div>
+          <div class="tab-content hidden" data-tab="b5">Content for Tab 5</div>
+          <div class="tab-content hidden" data-tab="b6">Content for Tab 6</div>
+        </section>
+      </section>
     </main>
 
     <footer>Footer</footer>
-
+    <script src="js/tabs.js"></script>
     <script src="js/piano.js"></script>
   </body>
 </html>

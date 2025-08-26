@@ -92,3 +92,41 @@ main {
   margin-bottom: 5px;
   font-size: 0.9rem;
 }
+
+.tab-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.tab-btn {
+  padding: 6px 14px;
+  background: #333;
+  border: 1px solid #555;
+  color: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+
+.tab-btn:hover {
+  background: #444;
+}
+
+.tab-btn.active {
+  background: #666;
+  font-weight: bold;
+}
+
+.tab-content {
+  background: #181818;
+  border: 1px solid #333;
+  padding: 20px;
+  border-radius: 6px;
+  min-height: 120px;
+}
+
+.hidden {
+  display: none;
+}
