@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>88-Key Piano Keyboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h1 {
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+        font-size: 2.5em;
+        font-weight: 300;
+      }
+
+      .piano-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(145deg, #135c8b, #135c8b);
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow:
+          0 20px 40px rgba(0, 0, 0, 0.4),
+          inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        overflow-x: auto;
+        max-width: 95vw;
+      }
+
+      .keyboard {
+        position: relative;
+        display: flex;
+        background: linear-gradient(145deg, #2f1b14, #1a0f0a);
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow:
+          inset 0 4px 8px rgba(0, 0, 0, 0.6),
+          inset 0 -2px 4px rgba(255, 255, 255, 0.05);
+      }
+
+      .white-key {
+        width: 24px;
+        height: 140px;
+        background: linear-gradient(
+          180deg,
+          #ffffff 0%,
+          #f8f8f8 50%,
+          #f0f0f0 100%
+        );
+        border: 1px solid #ddd;
+        border-radius: 0 0 4px 4px;
+        margin-right: 1px;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.1s ease;
+        box-shadow:
+          0 2px 4px rgba(0, 0, 0, 0.1),
+          inset 0 1px 2px rgba(255, 255, 255, 0.8),
+          inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      .white-key:hover {
+        background: linear-gradient(
+          180deg,
+          #f5f5f5 0%,
+          #eeeeee 50%,
+          #e8e8e8 100%
+        );
+        transform: translateY(1px);
+        box-shadow:
+          0 1px 2px rgba(0, 0, 0, 0.2),
+          inset 0 1px 2px rgba(255, 255, 255, 0.6),
+          inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .white-key:active {
+        background: linear-gradient(
+          180deg,
+          #e8e8e8 0%,
+          #e0e0e0 50%,
+          #d8d8d8 100%
+        );
+        transform: translateY(2px);
+        box-shadow:
+          inset 0 2px 4px rgba(0, 0, 0, 0.3),
+          inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      }
+
+      .black-key {
+        width: 16px;
+        height: 90px;
+        background: linear-gradient(
+          180deg,
+          #2a2a2a 0%,
+          #1a1a1a 50%,
+          #000000 100%
+        );
+        border-radius: 0 0 3px 3px;
+        position: absolute;
+        cursor: pointer;
+        z-index: 2;
+        transition: all 0.1s ease;
+        box-shadow:
+          0 4px 8px rgba(0, 0, 0, 0.4),
+          inset 0 1px 2px rgba(255, 255, 255, 0.1),
+          inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+      }
+
+      .black-key:hover {
+        background: linear-gradient(
+          180deg,
+          #404040 0%,
+          #2a2a2a 50%,
+          #1a1a1a 100%
+        );
+        transform: translateY(1px);
+        box-shadow:
+          0 3px 6px rgba(0, 0, 0, 0.5),
+          inset 0 1px 2px rgba(255, 255, 255, 0.15),
+          inset 0 -1px 2px rgba(0, 0, 0, 0.9);
+      }
+
+      .black-key:active {
+        background: linear-gradient(
+          180deg,
+          #1a1a1a 0%,
+          #0a0a0a 50%,
+          #000000 100%
+        );
+        transform: translateY(2px);
+        box-shadow:
+          inset 0 2px 4px rgba(0, 0, 0, 0.8),
+          inset 0 1px 2px rgba(255, 255, 255, 0.05);
+      }
+
+      .key-label {
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 9px;
+        font-weight: 500;
+        color: #888;
+        pointer-events: none;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+      }
+
+      .black-key .key-label {
+        color: #bbb;
+        bottom: 6px;
+        font-size: 7px;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+      }
+
+      /* Special styling for middle C (C4) */
+      .white-key[data-note="C4"] {
+        border-left: 2px solid #ff6b6b;
+      }
+
+      .white-key[data-note="C4"] .key-label {
+        color: #ff6b6b;
+        font-weight: bold;
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .piano-container {
+          padding: 15px;
+        }
+
+        .keyboard {
+          padding: 10px;
+        }
+
+        .white-key {
+          width: 18px;
+          height: 100px;
+        }
+
+        .black-key {
+          width: 12px;
+          height: 65px;
+        }
+
+        .key-label {
+          font-size: 7px;
+          bottom: 5px;
+        }
+
+        .black-key .key-label {
+          font-size: 5px;
+          bottom: 3px;
+        }
+
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .white-key {
+          width: 14px;
+          height: 80px;
+        }
+
+        .black-key {
+          width: 9px;
+          height: 50px;
+        }
+
+        .key-label {
+          font-size: 6px;
+          bottom: 3px;
+        }
+
+        .black-key .key-label {
+          font-size: 4px;
+          bottom: 2px;
+        }
+      }
+
+      /* Animation for key press effect */
+      @keyframes keyPress {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(2px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .key-pressed {
+        animation: keyPress 0.2s ease;
+      }
+
+      /* Subtle glow effect on hover */
+      .white-key:hover::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        border-radius: 0 0 6px 6px;
+        z-index: -1;
+      }
+
+      .black-key:hover::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.05),
+          transparent
+        );
+        border-radius: 0 0 5px 5px;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="text-align: center; margin-bottom: 20px">
+      88-Key Piano Keyboard
+    </h1>
+
+    <div class="piano-container">
+      <div class="keyboard" id="keyboard">
+        <!-- White keys will be generated here -->
+        <!-- Black keys will be positioned absolutely -->
+      </div>
+    </div>
+
+    <script>
+      // Piano key data - 88 keys from A0 to C8
+      const keys = [
+        // Starting partial octave
+        { note: "A0", type: "white", octave: 0 },
+        { note: "A#0", type: "black", octave: 0 },
+        { note: "B0", type: "white", octave: 0 },
+
+        // Full octaves 1-7
+        { note: "C1", type: "white", octave: 1 },
+        { note: "C#1", type: "black", octave: 1 },
+        { note: "D1", type: "white", octave: 1 },
+        { note: "D#1", type: "black", octave: 1 },
+        { note: "E1", type: "white", octave: 1 },
+        { note: "F1", type: "white", octave: 1 },
+        { note: "F#1", type: "black", octave: 1 },
+        { note: "G1", type: "white", octave: 1 },
+        { note: "G#1", type: "black", octave: 1 },
+        { note: "A1", type: "white", octave: 1 },
+        { note: "A#1", type: "black", octave: 1 },
+        { note: "B1", type: "white", octave: 1 },
+
+        { note: "C2", type: "white", octave: 2 },
+        { note: "C#2", type: "black", octave: 2 },
+        { note: "D2", type: "white", octave: 2 },
+        { note: "D#2", type: "black", octave: 2 },
+        { note: "E2", type: "white", octave: 2 },
+        { note: "F2", type: "white", octave: 2 },
+        { note: "F#2", type: "black", octave: 2 },
+        { note: "G2", type: "white", octave: 2 },
+        { note: "G#2", type: "black", octave: 2 },
+        { note: "A2", type: "white", octave: 2 },
+        { note: "A#2", type: "black", octave: 2 },
+        { note: "B2", type: "white", octave: 2 },
+
+        { note: "C3", type: "white", octave: 3 },
+        { note: "C#3", type: "black", octave: 3 },
+        { note: "D3", type: "white", octave: 3 },
+        { note: "D#3", type: "black", octave: 3 },
+        { note: "E3", type: "white", octave: 3 },
+        { note: "F3", type: "white", octave: 3 },
+        { note: "F#3", type: "black", octave: 3 },
+        { note: "G3", type: "white", octave: 3 },
+        { note: "G#3", type: "black", octave: 3 },
+        { note: "A3", type: "white", octave: 3 },
+        { note: "A#3", type: "black", octave: 3 },
+        { note: "B3", type: "white", octave: 3 },
+
+        { note: "C4", type: "white", octave: 4 },
+        { note: "C#4", type: "black", octave: 4 },
+        { note: "D4", type: "white", octave: 4 },
+        { note: "D#4", type: "black", octave: 4 },
+        { note: "E4", type: "white", octave: 4 },
+        { note: "F4", type: "white", octave: 4 },
+        { note: "F#4", type: "black", octave: 4 },
+        { note: "G4", type: "white", octave: 4 },
+        { note: "G#4", type: "black", octave: 4 },
+        { note: "A4", type: "white", octave: 4 },
+        { note: "A#4", type: "black", octave: 4 },
+        { note: "B4", type: "white", octave: 4 },
+
+        { note: "C5", type: "white", octave: 5 },
+        { note: "C#5", type: "black", octave: 5 },
+        { note: "D5", type: "white", octave: 5 },
+        { note: "D#5", type: "black", octave: 5 },
+        { note: "E5", type: "white", octave: 5 },
+        { note: "F5", type: "white", octave: 5 },
+        { note: "F#5", type: "black", octave: 5 },
+        { note: "G5", type: "white", octave: 5 },
+        { note: "G#5", type: "black", octave: 5 },
+        { note: "A5", type: "white", octave: 5 },
+        { note: "A#5", type: "black", octave: 5 },
+        { note: "B5", type: "white", octave: 5 },
+
+        { note: "C6", type: "white", octave: 6 },
+        { note: "C#6", type: "black", octave: 6 },
+        { note: "D6", type: "white", octave: 6 },
+        { note: "D#6", type: "black", octave: 6 },
+        { note: "E6", type: "white", octave: 6 },
+        { note: "F6", type: "white", octave: 6 },
+        { note: "F#6", type: "black", octave: 6 },
+        { note: "G6", type: "white", octave: 6 },
+        { note: "G#6", type: "black", octave: 6 },
+        { note: "A6", type: "white", octave: 6 },
+        { note: "A#6", type: "black", octave: 6 },
+        { note: "B6", type: "white", octave: 6 },
+
+        { note: "C7", type: "white", octave: 7 },
+        { note: "C#7", type: "black", octave: 7 },
+        { note: "D7", type: "white", octave: 7 },
+        { note: "D#7", type: "black", octave: 7 },
+        { note: "E7", type: "white", octave: 7 },
+        { note: "F7", type: "white", octave: 7 },
+        { note: "F#7", type: "black", octave: 7 },
+        { note: "G7", type: "white", octave: 7 },
+        { note: "G#7", type: "black", octave: 7 },
+        { note: "A7", type: "white", octave: 7 },
+        { note: "A#7", type: "black", octave: 7 },
+        { note: "B7", type: "white", octave: 7 },
+
+        // Final key
+        { note: "C8", type: "white", octave: 8 },
+      ];
+
+      function generateKeyboard() {
+        const keyboard = document.getElementById("keyboard");
+        const whiteKeys = keys.filter((key) => key.type === "white");
+        const blackKeys = keys.filter((key) => key.type === "black");
+
+        // Generate white keys first
+        whiteKeys.forEach((key, index) => {
+          const keyElement = document.createElement("div");
+          keyElement.className = "white-key";
+          keyElement.setAttribute("data-note", key.note);
+          keyElement.setAttribute("data-octave", key.octave);
+
+          const label = document.createElement("span");
+          label.className = "key-label";
+          label.textContent = key.note;
+          keyElement.appendChild(label);
+
+          keyboard.appendChild(keyElement);
+        });
+
+        // Generate black keys and position them
+        let whiteKeyIndex = 0;
+        blackKeys.forEach((blackKey) => {
+          // Find the position relative to white keys
+          const keysBefore = keys.slice(0, keys.indexOf(blackKey));
+          const whiteKeysBefore = keysBefore.filter(
+            (k) => k.type === "white",
+          ).length;
+
+          const keyElement = document.createElement("div");
+          keyElement.className = "black-key";
+          keyElement.setAttribute("data-note", blackKey.note);
+          keyElement.setAttribute("data-octave", blackKey.octave);
+
+          const label = document.createElement("span");
+          label.className = "key-label";
+          label.textContent = blackKey.note;
+          keyElement.appendChild(label);
+
+          // Position the black key between white keys
+          const leftPosition = whiteKeysBefore * 25 - -6; // 25px = white key width + margin, -8px to center
+          keyElement.style.left = leftPosition + "px";
+
+          keyboard.appendChild(keyElement);
+        });
+      }
+
+      // Generate the keyboard when page loads
+      document.addEventListener("DOMContentLoaded", generateKeyboard);
+    </script>
+  </body>
+</html>
