@@ -1,4 +1,4 @@
-![alt text](screenshot.png "Piano image")
+![alt text](images/screenshot.png "Piano image")
 
 # 88-Key Piano Keyboard (Web Visualizer)
 
