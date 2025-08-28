@@ -4,16 +4,47 @@
     border-radius: 8px;
     overflow: hidden;
     color: #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* Top section with chord selector and keyboard */
+.chord-panel-top {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+/* Left column for chord selector */
+.chord-panel-left {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+/* Right column for zoomed keyboard */
+.chord-panel-right {
+    flex: 1;
+    border-left: 1px solid #333;
+    display: flex;
+    align-items: stretch;
+}
+
+/* Bottom section for chord display */
+.chord-panel-bottom {
+    border-top: 1px solid #333;
 }
 
 /* Main chord selector container */
 .chord-selector {
     background-color: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 8px;
+    border: none;
+    border-radius: 0;
     padding: 15px;
     margin-bottom: 0;
     color: #ddd;
+    height: 100%;
 }
 
 /* Chord selector title and layout */
@@ -52,12 +83,14 @@
     flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 15px;
+    justify-content: space-between;
 }
 
 .dropdown-group {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    flex: 1;
 }
 
 .dropdown-group label {
@@ -66,7 +99,7 @@
 }
 
 .chord-dropdown {
-    min-width: 180px;
+    width: 100%;
     padding: 6px 10px;
     border-radius: 4px;
     background-color: #2d2d2d;
@@ -105,19 +138,22 @@
     color: #ccc;
     border: 1px solid #444;
     border-radius: 4px;
-    padding: 3px 8px;
+    padding: 5px 10px;
     font-size: 0.8em;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .clear-selected-chord:hover {
     background-color: #333;
+    border-color: #555;
 }
 
 /* Chord display container styles */
 #chord-display-container {
-    padding: 0;
+    padding: 15px;
     margin: 0;
+    background-color: #1a1a1a;
 }
 
 /* Make sure the chord display fits correctly in the container */
@@ -125,26 +161,83 @@
     width: 100%;
 }
 
+/* Styling for the chord display for a cleaner look */
+.chord-display {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chord-symbol {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.chord-quality {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.chord-quality.chord-major {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+.chord-quality.chord-minor {
+    background-color: rgba(147, 51, 234, 0.2);
+    color: #a78bfa;
+}
+
 /* Zoomed keyboard integration */
 #zoomed-keyboard-container {
-    margin-top: 0;
+    margin: 0;
     padding: 0;
-    border-top: 1px solid #333;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 #zoomed-keyboard-container .zoomed-keyboard {
-    margin-top: 0;
+    margin: 0;
     border-radius: 0;
     border: none;
-    border-top: none;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .zoomed-keyboard-header {
     display: none; /* Hide this as we're using the chord info from above */
 }
 
+.zoomed-keys-container {
+    margin: 10px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .chord-panel-top {
+        flex-direction: column;
+    }
+
+    .chord-panel-left, 
+    .chord-panel-right {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .chord-panel-right {
+        border-left: none;
+        border-top: 1px solid #333;
+    }
+
     .chord-selector-controls {
         flex-direction: column;
         gap: 10px;
@@ -171,5 +264,10 @@
     .clear-selected-chord {
         margin-left: 0;
         margin-top: 10px;
+    }
+
+    .zoomed-keys-container {
+        padding: 10px;
+        min-height: 150px;
     }
 }

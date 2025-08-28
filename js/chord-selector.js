@@ -61,7 +61,6 @@ class ChordSelector {
               <option value="">Select chord quality...</option>
             </select>
           </div>
-          <button class="clear-chord-btn" title="Clear selected chord">Clear</button>
         </div>
         <div class="selected-chord-info" style="display: none;">
           <div class="selected-chord-symbol"></div>
@@ -99,12 +98,10 @@ class ChordSelector {
     attachEventListeners() {
         const rootSelect = this.container.querySelector('#root-note-select');
         const qualitySelect = this.container.querySelector('#chord-quality-select');
-        const clearBtn = this.container.querySelector('.clear-chord-btn');
         const clearSelectedBtn = this.container.querySelector('.clear-selected-chord');
 
         rootSelect.addEventListener('change', () => this.updateSelectedChord());
         qualitySelect.addEventListener('change', () => this.updateSelectedChord());
-        clearBtn.addEventListener('click', () => this.clearSelection());
 
         if (clearSelectedBtn) {
             clearSelectedBtn.addEventListener('click', () => this.clearSelection());
