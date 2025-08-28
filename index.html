@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/layout.css" />
     <link rel="stylesheet" href="css/piano-styles.css" />
     <link rel="stylesheet" href="css/midonika.css" />
+    <link rel="stylesheet" href="css/chord-display.css" />
   </head>
   <body>
     <header>Tonika I</header>
@@ -24,7 +25,9 @@
           <button class="tab-btn" data-tab="6">Midi Info</button>
         </div>
 
-        <div class="tab-content" data-tab="1">Content for Tab 1</div>
+        <div class="tab-content" data-tab="1">
+          <div id="chord-display"></div>
+        </div>
         <div class="tab-content hidden" data-tab="2">Content for Tab 2</div>
         <div class="tab-content hidden" data-tab="3">Content for Tab 3</div>
         <div class="tab-content hidden" data-tab="4">Content for Tab 4</div>
@@ -87,20 +90,49 @@
     </main>
 
     <footer>Footer</footer>
+    <!-- Everything above this is unchanged -->
+
     <script src="js/midonika.iife.js"></script>
     <script src="js/tabs.js"></script>
     <script src="js/piano.js"></script>
-    <script src="./js/midibridge.js"></script>
-    <script>
-      const midonikaContainer = document.getElementById("midonika-container");
-      let midonikaApp = null;
+    <script src="js/midibridge.js"></script>
 
-      document.querySelectorAll(".tab-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const tabId = btn.dataset.tab;
-          if (tabId === "6" && !midonikaApp) {
-            midonikaApp = Midonika.createMidonika("#midonika-container");
-          }
+    <!-- New chord analysis scripts -->
+    <script src="js/midi-api-bridge.js"></script>
+    <script src="js/chord-analyzer.js"></script>
+    <script src="js/chord-display.js"></script>
+
+    <script>
+      let midonikaApp = null;
+      let _chordSetupDone = false;
+
+      // 🎹 Launch Midonika immediately so it's ready for all tabs
+      window.addEventListener("DOMContentLoaded", () => {
+        midonikaApp = Midonika.createMidonika("#midonika-container");
+
+        // 🧠 Tab switch handler
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const tabId = btn.dataset.tab;
+
+            // 🎼 Set up chord detection logic when Tab 1 is clicked (only once)
+            if (tabId === "1" && !_chordSetupDone) {
+              _chordSetupDone = true;
+
+              const midiBridge = new MidiApiBridge(midonikaApp);
+              const chordAnalyzer = new ChordAnalyzer();
+              const chordDisplay = new ChordDisplay("#chord-display");
+
+              midiBridge.subscribe((data) => {
+                console.log("🎼 MIDI Bridge Data:", data);
+                const chord = chordAnalyzer.analyzeNotes(
+                  data.activeNotes || [],
+                );
+                console.log("🎹 Chord Output:", chord);
+                chordDisplay.updateChord(chord);
+              });
+            }
+          });
         });
       });
     </script>

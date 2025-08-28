@@ -1,5 +1,16 @@
-var Midonika = (function (i) {
+(function () {
   "use strict";
+
+  // 🆕 Goblin Patch: Track active MIDI notes for external usage
+  const activeNotes = new Set();
+  const listeners = [];
+
+  function notifyListeners() {
+    listeners.forEach((fn) => {
+      fn({ activeNotes: Array.from(activeNotes) });
+    });
+  }
+
   const d = (n, t = {}, ...s) => {
       const e = Object.assign(document.createElement(n), t);
       for (const a of s) e.append(a);
@@ -18,6 +29,7 @@ var Midonika = (function (i) {
     },
     v = (n) => (n & 15) + 1,
     f = (n) => n & 240;
+
   function g({ data: n, src: t }) {
     const [s, e = 0, a = 0] = n,
       c = v(s);
@@ -44,6 +56,7 @@ var Midonika = (function (i) {
         return `${o()} 0x${s.toString(16)} ${e} ${a} src="${t}"`;
     }
   }
+
   class M {
     constructor({ onDevices: t, onMessage: s, onStatus: e }) {
       (this._access = null),
@@ -51,6 +64,7 @@ var Midonika = (function (i) {
         (this._onMessage = s),
         (this._onStatus = e);
     }
+
     async init() {
       if (!navigator.requestMIDIAccess) {
         this._onStatus("Web MIDI is not supported in this browser.");
@@ -67,6 +81,7 @@ var Midonika = (function (i) {
         this._onStatus(`MIDI error: ${(t == null ? void 0 : t.message) || t}`);
       }
     }
+
     _refreshDevices() {
       const t = Array.from(this._access.inputs.values()),
         s = Array.from(this._access.outputs.values());
@@ -84,15 +99,31 @@ var Midonika = (function (i) {
       }),
         this._wireInputs();
     }
+
     _wireInputs() {
       for (const t of this._access.inputs.values())
         t.onmidimessage = (s) => {
           const e = t.name || "MIDI",
             a = g({ data: s.data, src: e });
+
+          // ✨ Midonika core logs as before
           this._onMessage(a);
+
+          // 🆕 Intercept for external state tracking
+          const [status, note, velocity] = s.data;
+          const type = f(status);
+
+          if (type === 144 && velocity > 0) {
+            activeNotes.add(note);
+            notifyListeners();
+          } else if (type === 128 || (type === 144 && velocity === 0)) {
+            activeNotes.delete(note);
+            notifyListeners();
+          }
         };
     }
   }
+
   function _(n) {
     const t = d("div", { className: "midonika-panel" });
     (t.innerHTML = `
@@ -128,12 +159,8 @@ var Midonika = (function (i) {
           e.replaceChildren(...r.map($)), a.replaceChildren(...D.map($));
         },
         appendLog: (r) => {
-          c.append(
-            r +
-              `
-`,
-          ),
-            (c.scrollTop = c.scrollHeight);
+          c.append(r + `\n`);
+          c.scrollTop = c.scrollHeight;
         },
         setStatus: (r) => {
           p.textContent = r ?? "";
@@ -141,14 +168,18 @@ var Midonika = (function (i) {
         clear: () => {
           c.textContent = "";
         },
+        // 🆕 External state hook
+        onStateChange: (fn) => listeners.push(fn),
       }
     );
   }
+
   function $(n) {
     const t = n.name || "Unknown",
       s = n.manufacturer ? ` (${n.manufacturer})` : "";
     return d("li", {}, document.createTextNode(`${t}${s}`));
   }
+
   function h(n, t = {}) {
     const s = typeof n == "string" ? document.querySelector(n) : n;
     if (!s) throw new Error("Midonika: container not found");
@@ -166,17 +197,12 @@ var Midonika = (function (i) {
         destroy: () => {
           s.innerHTML = "";
         },
+        // 🆕 Expose to chord analyzer
+        onStateChange: e.onStateChange,
       }
     );
   }
+
   const S = { createMidonika: h };
-  return (
-    (i.createMidonika = h),
-    (i.default = S),
-    Object.defineProperties(i, {
-      __esModule: { value: !0 },
-      [Symbol.toStringTag]: { value: "Module" },
-    }),
-    i
-  );
-})({});
+  window.Midonika = S;
+})();

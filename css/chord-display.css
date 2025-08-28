@@ -1,0 +1,46 @@
+.chord-display {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.chord-symbol {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.chord-major {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.chord-minor {
+  background: #dcfce7;
+  color: #166534;
+}
+.chord-dominant {
+  background: #fed7aa;
+  color: #c2410c;
+}
+.chord-half-diminished {
+  background: #e9d5ff;
+  color: #7c2d12;
+}
+.chord-diminished {
+  background: #fecaca;
+  color: #dc2626;
+}
+.chord-augmented {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.extension {
+  display: inline-block;
+  background: #f3f4f6;
+  padding: 2px 6px;
+  margin: 2px;
+  border-radius: 4px;
+  font-size: 0.8em;
+}
