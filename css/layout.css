@@ -157,13 +157,13 @@ main {
 }
 
 .tab-content {
-    background: #181818;
-    border: 1px solid #333;
-    padding: 20px;
-    border-radius: 6px;
-    min-height: 380px;
-    max-height: 380px;
-    overflow-y: auto;  /* ← Added this line */
+  background: #181818;
+  border: 1px solid #333;
+  padding: 20px;
+  border-radius: 6px;
+  min-height: 380px;
+  max-height: 380px;
+  overflow-y: auto; /* ← Added this line */
 }
 
 .hidden {

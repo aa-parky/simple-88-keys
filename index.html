@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="css/piano-styles.css" />
     <link rel="stylesheet" href="css/midonika.css" />
     <link rel="stylesheet" href="css/chord-display.css" />
-      <link rel="stylesheet" href="css/zoomed-keyboard.css" />
-      <link rel="stylesheet" href="css/chord-selector.css" />
+    <link rel="stylesheet" href="css/zoomed-keyboard.css" />
+    <link rel="stylesheet" href="css/chord-selector.css" />
   </head>
   <body>
     <header>Tonika I</header>
@@ -27,30 +27,30 @@
           <button class="tab-btn" data-tab="6">Midi Info</button>
         </div>
 
-          <div class="tab-content" data-tab="1">
-              <div class="chord-panel">
-                  <div class="chord-panel-top">
-                      <div class="chord-panel-left">
-                          <div id="chord-selector-container"></div>
-                      </div>
-                      <div class="chord-panel-right">
-                          <div id="zoomed-keyboard-container"></div>
-                      </div>
-                  </div>
-                  <div class="chord-panel-bottom">
-                      <div id="chord-display-container">
-                          <div id="chord-display"></div>
-                      </div>
-                  </div>
+        <div class="tab-content" data-tab="1">
+          <div class="chord-panel">
+            <div class="chord-panel-top">
+              <div class="chord-panel-left">
+                <div id="chord-selector-container"></div>
               </div>
+              <div class="chord-panel-right">
+                <div id="zoomed-keyboard-container"></div>
+              </div>
+            </div>
+            <div class="chord-panel-bottom">
+              <div id="chord-display-container">
+                <div id="chord-display"></div>
+              </div>
+            </div>
           </div>
-          <div class="tab-content hidden" data-tab="2">Content for Tab 2</div>
-          <div class="tab-content hidden" data-tab="3">Content for Tab 3</div>
-          <div class="tab-content hidden" data-tab="4">Content for Tab 4</div>
-          <div class="tab-content hidden" data-tab="5">Content for Tab 5</div>
-          <div class="tab-content hidden" data-tab="6">
-              <div id="midonika-container" class="midonika-wrap"></div>
-          </div>
+        </div>
+        <div class="tab-content hidden" data-tab="2">Content for Tab 2</div>
+        <div class="tab-content hidden" data-tab="3">Content for Tab 3</div>
+        <div class="tab-content hidden" data-tab="4">Content for Tab 4</div>
+        <div class="tab-content hidden" data-tab="5">Content for Tab 5</div>
+        <div class="tab-content hidden" data-tab="6">
+          <div id="midonika-container" class="midonika-wrap"></div>
+        </div>
       </section>
 
       <section class="piano-wrapper">
@@ -121,101 +121,101 @@
     <script src="js/zoomed-keyboard.js"></script>
 
     <script>
-        let midonikaApp = null;
-        let _chordSetupDone = false;
+      let midonikaApp = null;
+      let _chordSetupDone = false;
 
-        // Make these global for debugging
-        window.chordSelector = null;
-        window.zoomedKeyboard = null;
+      // Make these global for debugging
+      window.chordSelector = null;
+      window.zoomedKeyboard = null;
 
-        // Function to set up chord detection
-        function setupChordDetection() {
-            if (_chordSetupDone) return; // Prevent duplicate setup
-            _chordSetupDone = true;
+      // Function to set up chord detection
+      function setupChordDetection() {
+        if (_chordSetupDone) return; // Prevent duplicate setup
+        _chordSetupDone = true;
 
-            const chordAnalyzer = new ChordAnalyzer();
-            const chordDisplay = new ChordDisplay("#chord-display");
+        const chordAnalyzer = new ChordAnalyzer();
+        const chordDisplay = new ChordDisplay("#chord-display");
 
-            // Initialize chord selector and zoomed keyboard
-            window.chordSelector = new ChordSelector("#chord-selector-container");
-            window.zoomedKeyboard = new ZoomedKeyboard("#zoomed-keyboard-container");
+        // Initialize chord selector and zoomed keyboard
+        window.chordSelector = new ChordSelector("#chord-selector-container");
+        window.zoomedKeyboard = new ZoomedKeyboard(
+          "#zoomed-keyboard-container",
+        );
 
-            // Connect chord selector to zoomed keyboard
-            window.chordSelector.setChordSelectedCallback((chord) => {
-                window.zoomedKeyboard.displayChord(chord);
-            });
+        // Connect chord selector to zoomed keyboard
+        window.chordSelector.setChordSelectedCallback((chord) => {
+          window.zoomedKeyboard.displayChord(chord);
+        });
 
-            // Update zoomed keyboard when Middle C mapping changes
-            const middleCSelect = document.querySelector('#middleC');
-            if (middleCSelect) {
-                middleCSelect.addEventListener('change', (e) => {
-                    window.zoomedKeyboard.updateMiddleCMapping(e.target.value);
-                });
-                // Set initial mapping
-                window.zoomedKeyboard.updateMiddleCMapping(middleCSelect.value);
-            }
-
-            // Hook directly into the existing piano interface
-            const originalNoteOn = window.PianoInterface.noteOn;
-            const originalNoteOff = window.PianoInterface.noteOff;
-
-            let activeNotes = new Set();
-
-            // Override noteOn to add chord analysis
-            window.PianoInterface.noteOn = function (midiNote) {
-                // Call original function first (keeps piano working)
-                originalNoteOn.call(this, midiNote);
-
-                // Add to active notes and analyze
-                activeNotes.add(midiNote);
-                analyzeCurrentChord();
-            };
-
-            // Override noteOff to update chord analysis
-            window.PianoInterface.noteOff = function (midiNote) {
-                // Call original function first (keeps piano working)
-                originalNoteOff.call(this, midiNote);
-
-                // Remove from active notes and re-analyze
-                activeNotes.delete(midiNote);
-                analyzeCurrentChord();
-            };
-
-            function analyzeCurrentChord() {
-                if (activeNotes.size >= 2) {
-                    const chord = chordAnalyzer.analyzeNotes(
-                        Array.from(activeNotes),
-                    );
-                    console.log("🎵 Chord detected:", chord);
-                    chordDisplay.updateChord(chord);
-                } else {
-                    chordDisplay.clearDisplay();
-                }
-            }
-
-            console.log("✅ Chord analysis connected to piano interface");
-            console.log("✅ Chord selector and zoomed keyboard initialized");
+        // Update zoomed keyboard when Middle C mapping changes
+        const middleCSelect = document.querySelector("#middleC");
+        if (middleCSelect) {
+          middleCSelect.addEventListener("change", (e) => {
+            window.zoomedKeyboard.updateMiddleCMapping(e.target.value);
+          });
+          // Set initial mapping
+          window.zoomedKeyboard.updateMiddleCMapping(middleCSelect.value);
         }
 
-        // 🎹 Launch Midonika immediately so it's ready for all tabs
-        window.addEventListener("DOMContentLoaded", () => {
-            midonikaApp = Midonika.createMidonika("#midonika-container");
+        // Hook directly into the existing piano interface
+        const originalNoteOn = window.PianoInterface.noteOn;
+        const originalNoteOff = window.PianoInterface.noteOff;
 
-            // Set up chord detection immediately since Tab 1 is active by default
-            setupChordDetection();
+        let activeNotes = new Set();
 
-            // 🧠 Tab switch handler
-            document.querySelectorAll(".tab-btn").forEach((btn) => {
-                btn.addEventListener("click", () => {
-                    const tabId = btn.dataset.tab;
+        // Override noteOn to add chord analysis
+        window.PianoInterface.noteOn = function (midiNote) {
+          // Call original function first (keeps piano working)
+          originalNoteOn.call(this, midiNote);
 
-                    // If switching to Tab 1, ensure chord detection is set up
-                    if (tabId === "1") {
-                        setupChordDetection();
-                    }
-                });
-            });
+          // Add to active notes and analyze
+          activeNotes.add(midiNote);
+          analyzeCurrentChord();
+        };
+
+        // Override noteOff to update chord analysis
+        window.PianoInterface.noteOff = function (midiNote) {
+          // Call original function first (keeps piano working)
+          originalNoteOff.call(this, midiNote);
+
+          // Remove from active notes and re-analyze
+          activeNotes.delete(midiNote);
+          analyzeCurrentChord();
+        };
+
+        function analyzeCurrentChord() {
+          if (activeNotes.size >= 2) {
+            const chord = chordAnalyzer.analyzeNotes(Array.from(activeNotes));
+            console.log("🎵 Chord detected:", chord);
+            chordDisplay.updateChord(chord);
+          } else {
+            chordDisplay.clearDisplay();
+          }
+        }
+
+        console.log("✅ Chord analysis connected to piano interface");
+        console.log("✅ Chord selector and zoomed keyboard initialized");
+      }
+
+      // 🎹 Launch Midonika immediately so it's ready for all tabs
+      window.addEventListener("DOMContentLoaded", () => {
+        midonikaApp = Midonika.createMidonika("#midonika-container");
+
+        // Set up chord detection immediately since Tab 1 is active by default
+        setupChordDetection();
+
+        // 🧠 Tab switch handler
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const tabId = btn.dataset.tab;
+
+            // If switching to Tab 1, ensure chord detection is set up
+            if (tabId === "1") {
+              setupChordDetection();
+            }
+          });
         });
+      });
     </script>
   </body>
 </html>
