@@ -1,6 +1,8 @@
 /* Zoomed Keyboard Styles - safely namespaced to avoid conflict with piano-styles.css */
 .tonika-zoomed-keyboard {
     background-color: #1a1a1a;
+
+
     padding: 10px;
     color: #ddd;
     display: flex;
@@ -28,18 +30,6 @@
     color: #4f46e5;
 }
 
-.tonika-zoomed-keys-container {
-    background-color: #0f0f0f;
-    border-radius: 6px;
-    border: 1px solid #333;
-    overflow-x: hidden; /* Change to hidden to prevent scrollbar */
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 160px;
-    padding: 10px 5px; /* Reduce horizontal padding */
-}
 
 .tonika-zoomed-keys {
     display: flex;

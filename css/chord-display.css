@@ -1,61 +1,116 @@
-.chord-display {
-  padding: 20px;
-  border: 1px solid #444;
-  border-radius: 8px;
+/* ======================
+   Chord Display Styling
+   ====================== */
 
-    min-height: 120px;
-max-height: 120px;
-  background-color: #111;
-  color: #ddd;
+.chord-display {
+    padding: 20px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background-color: #111;
+    color: #ddd;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+    max-height: 125px;
+    min-height: 125px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 /* Main chord symbol */
 .chord-symbol {
-  font-size: 2em;
-  font-weight: bold;
-  margin-bottom: 10px;
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+/* Single-line display row */
+.chord-summary-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95em;
+    color: #ccc;
+}
+
+.chord-quality {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.chord-notes {
+    font-style: italic;
+}
+
+.notes-label {
+    color: #888;
+    margin-right: 4px;
+}
+
+.notes-list {
+    color: #eee;
+    font-weight: 500;
 }
 
 /* Chord Type Color Blocks — dark-friendly with readable pops */
-
 .chord-major {
-  background: #1e3a8a; /* Deep blue */
-  color: #bfdbfe; /* Light blue text */
+    background: #1e3a8a; /* Deep blue */
+    color: #bfdbfe; /* Light blue text */
 }
 
 .chord-minor {
-  background: #065f46; /* Deep green */
-  color: #bbf7d0; /* Pale green */
+    background: #065f46; /* Deep green */
+    color: #bbf7d0; /* Pale green */
 }
 
 .chord-dominant {
-  background: #7c2d12; /* Deep orange/red */
-  color: #fed7aa; /* Soft peach */
+    background: #7c2d12; /* Deep orange/red */
+    color: #fed7aa; /* Soft peach */
 }
 
 .chord-half-diminished {
-  background: #6d28d9; /* Purple */
-  color: #e9d5ff; /* Pale lilac */
+    background: #6d28d9; /* Purple */
+    color: #e9d5ff; /* Pale lilac */
 }
 
 .chord-diminished {
-  background: #991b1b; /* Dark red */
-  color: #fecaca; /* Light pink */
+    background: #991b1b; /* Dark red */
+    color: #fecaca; /* Light pink */
 }
 
 .chord-augmented {
-  background: #78350f; /* Rich gold-brown */
-  color: #fde68a; /* Warm gold */
+    background: #78350f; /* Rich gold-brown */
+    color: #fde68a; /* Warm gold */
 }
 
 /* Chord Extensions */
 .extension {
-  display: inline-block;
-  background: #333;
-  padding: 2px 6px;
-  margin: 2px;
-  border-radius: 4px;
-  font-size: 0.8em;
-  color: #eee;
-  border: 1px solid #555;
+    display: inline-block;
+    background: #333;
+    padding: 2px 6px;
+    margin: 2px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    color: #eee;
+    border: 1px solid #555;
+}
+
+/* Accidental styling */
+.accidental {
+    color: #aaa;
+    margin: 0 2px;
+}
+
+.quality-symbol {
+    font-weight: bold;
+    font-style: italic;
+    color: #ccc;
+}
+
+.note-accidental {
+    color: #999;
+    margin: 0 1px;
 }
