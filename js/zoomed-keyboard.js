@@ -11,9 +11,10 @@ class ZoomedKeyboard {
 
     initializeKeyboard() {
         this.container.innerHTML = `
-      <div class="zoomed-keyboard">
-        <div class="zoomed-keys-container">
-          <div class="zoomed-keys" id="zoomed-keys"></div>
+      <div class="tonika-zoomed-keyboard">
+        <div class="tonika-zoomed-keys-container">
+          <div class="tonika-zoomed-keys white-keys" id="zoomed-white-keys"></div>
+          <div class="tonika-zoomed-keys black-keys" id="zoomed-black-keys"></div>
         </div>
       </div>
     `;
@@ -34,45 +35,101 @@ class ZoomedKeyboard {
             return;
         }
 
-        // Calculate the range of keys to display (2 octaves centered around the chord)
         const chordMidiNotes = chord.midiNotes;
         const minNote = Math.min(...chordMidiNotes);
         const maxNote = Math.max(...chordMidiNotes);
 
-        // Expand range to show context (at least 2 octaves)
         const centerNote = Math.floor((minNote + maxNote) / 2);
-        const rangeStart = Math.max(21, centerNote - 12); // Don't go below A0 (MIDI 21)
-        const rangeEnd = Math.min(108, centerNote + 12); // Don't go above C8 (MIDI 108)
+        const rangeStart = Math.max(21, centerNote - 12);
+        const rangeEnd = Math.min(108, centerNote + 12);
 
         this.renderKeyboardRange(rangeStart, rangeEnd, chordMidiNotes);
     }
 
     renderKeyboardRange(startMidi, endMidi, highlightNotes = []) {
-        const keysContainer = this.container.querySelector('#zoomed-keys');
-        keysContainer.innerHTML = '';
+        const whiteContainer = this.container.querySelector('#zoomed-white-keys');
+        const blackContainer = this.container.querySelector('#zoomed-black-keys');
+        whiteContainer.innerHTML = '';
+        blackContainer.innerHTML = '';
 
+        // First render all white keys
+        let whiteKeyCount = 0;
         for (let midi = startMidi; midi <= endMidi; midi++) {
-            const keyElement = this.createKeyElement(midi, highlightNotes.includes(midi));
-            keysContainer.appendChild(keyElement);
+            const isBlack = this.isBlackKey(midi);
+            if (!isBlack) {
+                const el = this.createKeyElement(midi, highlightNotes.includes(midi), isBlack);
+                whiteContainer.appendChild(el);
+                whiteKeyCount++;
+            }
+        }
+
+        // Calculate total width for positioning
+        const totalWidth = whiteKeyCount * 40; // 40px per white key
+        blackContainer.style.width = totalWidth + 'px';
+
+        // Then render black keys with correct positioning
+        for (let midi = startMidi; midi <= endMidi; midi++) {
+            const isBlack = this.isBlackKey(midi);
+            if (isBlack) {
+                const el = this.createKeyElement(midi, highlightNotes.includes(midi), isBlack);
+
+                // Calculate position based on white key before it
+                const prevWhiteKey = this.findPreviousWhiteKey(midi, startMidi);
+                const position = this.getBlackKeyPosition(midi, prevWhiteKey, startMidi);
+                el.style.left = position + 'px';
+
+                blackContainer.appendChild(el);
+            }
         }
     }
 
-    createKeyElement(midiNote, isHighlighted) {
+    findPreviousWhiteKey(midiNote, startMidi) {
+        let prev = midiNote - 1;
+        while (prev >= startMidi && this.isBlackKey(prev)) {
+            prev--;
+        }
+        return prev;
+    }
+
+    getBlackKeyPosition(midiNote, prevWhiteKey, startMidi) {
+        // Find how many white keys from the start to the previous white key
+        let whiteKeysBefore = 0;
+        for (let i = startMidi; i <= prevWhiteKey; i++) {
+            if (!this.isBlackKey(i)) {
+                whiteKeysBefore++;
+            }
+        }
+
+        // Calculate position (each white key is 40px wide)
+        const noteInOctave = midiNote % 12;
+        let offset = 26; // Default right side of white key
+
+        // Fine-tune position based on which black key it is
+        switch (noteInOctave) {
+            case 1: offset = 26; break; // C#
+            case 3: offset = 26; break; // D#
+            case 6: offset = 26; break; // F#
+            case 8: offset = 26; break; // G#
+            case 10: offset = 26; break; // A#
+        }
+
+        return (whiteKeysBefore * 40) - offset;
+    }
+
+    createKeyElement(midiNote, isHighlighted, isBlackKey) {
         const noteName = this.midiToNoteName(midiNote);
         const octave = Math.floor(midiNote / 12) - 1;
-        const isBlackKey = this.isBlackKey(midiNote);
 
         const keyEl = document.createElement('div');
-        keyEl.className = `zoomed-key ${isBlackKey ? 'black-key' : 'white-key'}`;
+        keyEl.className = `tonika-key ${isBlackKey ? 'black' : 'white'}`;
 
         if (isHighlighted) {
             keyEl.classList.add('highlighted');
         }
 
-        // Add note label for white keys or highlighted black keys
         if (!isBlackKey || isHighlighted) {
             const labelEl = document.createElement('span');
-            labelEl.className = 'key-label';
+            labelEl.className = 'tonika-key-label';
             labelEl.textContent = this.formatNoteLabel(noteName, octave);
             keyEl.appendChild(labelEl);
         }
@@ -84,21 +141,12 @@ class ZoomedKeyboard {
     }
 
     formatNoteLabel(noteName, octave) {
-        // Adjust octave display based on Middle C mapping
         let displayOctave = octave;
-
         switch (this.middleCMapping) {
-            case 'C3':
-                displayOctave = octave;
-                break;
-            case 'C4':
-                displayOctave = octave;
-                break;
-            case 'C5':
-                displayOctave = octave;
-                break;
+            case 'C3': displayOctave = octave; break;
+            case 'C4': displayOctave = octave; break;
+            case 'C5': displayOctave = octave; break;
         }
-
         return `${noteName}${displayOctave}`;
     }
 
@@ -108,20 +156,16 @@ class ZoomedKeyboard {
     }
 
     isBlackKey(midiNote) {
-        const noteInOctave = midiNote % 12;
-        return [1, 3, 6, 8, 10].includes(noteInOctave); // C#, D#, F#, G#, A#
+        return [1, 3, 6, 8, 10].includes(midiNote % 12);
     }
 
     clearKeyboard() {
-        const keysContainer = this.container.querySelector('#zoomed-keys');
-
-        keysContainer.innerHTML = `
-      <div class="no-chord-message">
-        <p>Choose a chord from the dropdowns above to see it visualized here.</p>
-      </div>
-    `;
-
+        const whiteContainer = this.container.querySelector('#zoomed-white-keys');
+        const blackContainer = this.container.querySelector('#zoomed-black-keys');
+        whiteContainer.innerHTML = '';
+        blackContainer.innerHTML = `<div class="tonika-no-chord-message">
+          <p>Choose a chord from the dropdowns above to see it visualized here.</p>
+        </div>`;
         this.currentChord = null;
     }
 }
-
