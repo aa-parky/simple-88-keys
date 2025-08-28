@@ -47,10 +47,7 @@ class ChordSelector {
     initializeUI() {
         this.container.innerHTML = `
       <div class="chord-selector">
-        <div class="chord-selector-header">
-          <h3>Chord Selection</h3>
-          <button class="clear-chord-btn" title="Clear selected chord">Clear</button>
-        </div>
+        <h3>Chord Selection</h3>
         <div class="chord-selector-controls">
           <div class="dropdown-group">
             <label for="root-note-select">Root Note:</label>
@@ -64,10 +61,12 @@ class ChordSelector {
               <option value="">Select chord quality...</option>
             </select>
           </div>
+          <button class="clear-chord-btn" title="Clear selected chord">Clear</button>
         </div>
-        <div class="selected-chord-info">
+        <div class="selected-chord-info" style="display: none;">
           <div class="selected-chord-symbol"></div>
           <div class="selected-chord-notes"></div>
+          <button class="clear-selected-chord">Clear selected chord</button>
         </div>
       </div>
     `;
@@ -101,10 +100,15 @@ class ChordSelector {
         const rootSelect = this.container.querySelector('#root-note-select');
         const qualitySelect = this.container.querySelector('#chord-quality-select');
         const clearBtn = this.container.querySelector('.clear-chord-btn');
+        const clearSelectedBtn = this.container.querySelector('.clear-selected-chord');
 
         rootSelect.addEventListener('change', () => this.updateSelectedChord());
         qualitySelect.addEventListener('change', () => this.updateSelectedChord());
         clearBtn.addEventListener('click', () => this.clearSelection());
+
+        if (clearSelectedBtn) {
+            clearSelectedBtn.addEventListener('click', () => this.clearSelection());
+        }
     }
 
     updateSelectedChord() {
@@ -156,17 +160,35 @@ class ChordSelector {
     displaySelectedChord(chord) {
         const symbolEl = this.container.querySelector('.selected-chord-symbol');
         const notesEl = this.container.querySelector('.selected-chord-notes');
+        const infoSection = this.container.querySelector('.selected-chord-info');
 
+        // Show the info section
+        infoSection.style.display = 'flex';
+
+        // Format the chord symbol with proper formatting
         symbolEl.textContent = chord.symbol;
-        notesEl.textContent = `Notes: ${chord.noteNames.join(', ')}`;
+
+        // Format notes with better display
+        const formattedNotes = chord.noteNames.join(', ');
+        notesEl.textContent = `Notes: ${formattedNotes}`;
+
+        // Add a class to indicate a chord is selected
+        this.container.querySelector('.chord-selector').classList.add('has-chord');
     }
 
     clearSelectedChordDisplay() {
         const symbolEl = this.container.querySelector('.selected-chord-symbol');
         const notesEl = this.container.querySelector('.selected-chord-notes');
+        const infoSection = this.container.querySelector('.selected-chord-info');
+
+        // Hide the info section
+        infoSection.style.display = 'none';
 
         symbolEl.textContent = '';
         notesEl.textContent = '';
+
+        // Remove the class that indicates a chord is selected
+        this.container.querySelector('.chord-selector').classList.remove('has-chord');
     }
 
     clearSelection() {

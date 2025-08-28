@@ -1,10 +1,9 @@
 /* Zoomed Keyboard Styles */
 .zoomed-keyboard {
     background-color: #1a1a1a;
-    border: 1px solid #444;
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 20px;
+    border: 1px solid #333;
+    border-radius: 0 0 8px 8px;
+    padding: 15px;
     color: #ddd;
 }
 
@@ -12,17 +11,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .zoomed-keyboard-header h4 {
     margin: 0;
     color: #fff;
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 .keyboard-info .chord-name {
-    font-size: 1.4em;
+    font-size: 1.2em;
     font-weight: bold;
     color: #4f46e5;
 }

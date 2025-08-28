@@ -12,12 +12,6 @@ class ZoomedKeyboard {
     initializeKeyboard() {
         this.container.innerHTML = `
       <div class="zoomed-keyboard">
-        <div class="zoomed-keyboard-header">
-          <h4>Chord Visualization</h4>
-          <div class="keyboard-info">
-            <span class="chord-name"></span>
-          </div>
-        </div>
         <div class="zoomed-keys-container">
           <div class="zoomed-keys" id="zoomed-keys"></div>
         </div>
@@ -39,10 +33,6 @@ class ZoomedKeyboard {
             this.clearKeyboard();
             return;
         }
-
-        // Update chord name display
-        const chordNameEl = this.container.querySelector('.chord-name');
-        chordNameEl.textContent = chord.symbol;
 
         // Calculate the range of keys to display (2 octaves centered around the chord)
         const chordMidiNotes = chord.midiNotes;
@@ -123,10 +113,8 @@ class ZoomedKeyboard {
     }
 
     clearKeyboard() {
-        const chordNameEl = this.container.querySelector('.chord-name');
         const keysContainer = this.container.querySelector('#zoomed-keys');
 
-        chordNameEl.textContent = 'Select a chord to visualize';
         keysContainer.innerHTML = `
       <div class="no-chord-message">
         <p>Choose a chord from the dropdowns above to see it visualized here.</p>

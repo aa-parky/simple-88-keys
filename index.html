@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/midonika.css" />
     <link rel="stylesheet" href="css/chord-display.css" />
       <link rel="stylesheet" href="css/zoomed-keyboard.css" />
+      <link rel="stylesheet" href="css/chord-selector.css" />
   </head>
   <body>
     <header>Tonika I</header>
@@ -27,9 +28,13 @@
         </div>
 
           <div class="tab-content" data-tab="1">
-              <div id="chord-selector-container"></div>
-              <div id="chord-display"></div>
-              <div id="zoomed-keyboard-container"></div>
+              <div class="chord-panel">
+                  <div id="chord-selector-container"></div>
+                  <div id="chord-display-container">
+                      <div id="chord-display"></div>
+                  </div>
+                  <div id="zoomed-keyboard-container"></div>
+              </div>
           </div>
           <div class="tab-content hidden" data-tab="2">Content for Tab 2</div>
           <div class="tab-content hidden" data-tab="3">Content for Tab 3</div>
