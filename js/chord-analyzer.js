@@ -52,16 +52,16 @@ class ChordAnalyzer {
   midiToNoteName(midiNote) {
     const noteNames = [
       "C",
-      "C#",
+      "C♯",
       "D",
-      "D#",
+      "D♯",
       "E",
       "F",
-      "F#",
+      "F♯",
       "G",
-      "G#",
+      "G♯",
       "A",
-      "A#",
+      "A♯",
       "B",
     ];
     return noteNames[midiNote % 12];
@@ -112,24 +112,44 @@ class ChordAnalyzer {
   generateSymbol(root, quality, extensions, alterations) {
     let symbol = this.midiToNoteName(root);
 
-    // Add quality
+    // Add quality with proper formatting
     if (quality === "minor") symbol += "m";
     else if (quality === "diminished") symbol += "dim";
     else if (quality === "half-diminished") symbol += "ø";
     else if (quality === "augmented") symbol += "+";
+    else if (quality === "major" && extensions.includes(7)) symbol += "maj";
 
-    // Add extensions
+    // Add extensions with spacing
+    const extensionParts = [];
     extensions.forEach((ext) => {
-      if (ext === 7 && quality === "major") symbol += "maj7";
-      else if (ext === 7) symbol += "7";
-      else symbol += ext;
+      if (ext === 7) {
+        if (quality === "major") {
+          // Already added "maj" above
+          extensionParts.push("7");
+        } else {
+          extensionParts.push("7");
+        }
+      } else {
+        extensionParts.push(ext.toString());
+      }
     });
 
-    // Add alterations
+    // Add extensions with space if any exist
+    if (extensionParts.length > 0) {
+      symbol += " " + extensionParts.join(" ");
+    }
+
+    // Add alterations with proper musical symbols and spacing
+    const alterationParts = [];
     alterations.forEach((alt) => {
-      const modifier = alt.modifier === "flat" ? "b" : "#";
-      symbol += modifier + alt.degree;
+      const modifier = alt.modifier === "flat" ? "♭" : "♯";
+      alterationParts.push(modifier + alt.degree);
     });
+
+    // Add alterations with space if any exist
+    if (alterationParts.length > 0) {
+      symbol += " " + alterationParts.join(" ");
+    }
 
     return symbol;
   }
