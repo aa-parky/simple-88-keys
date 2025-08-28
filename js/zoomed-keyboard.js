@@ -52,68 +52,54 @@ class ZoomedKeyboard {
         whiteContainer.innerHTML = '';
         blackContainer.innerHTML = '';
 
-        // First render all white keys
-        let whiteKeyCount = 0;
+        // Constants for key dimensions
+        const WHITE_KEY_WIDTH = 38;
+
+        // First pass: Render white keys and track their positions
+        const whiteKeyElements = [];
+
         for (let midi = startMidi; midi <= endMidi; midi++) {
-            const isBlack = this.isBlackKey(midi);
-            if (!isBlack) {
-                const el = this.createKeyElement(midi, highlightNotes.includes(midi), isBlack);
+            if (!this.isBlackKey(midi)) {
+                const el = this.createKeyElement(midi, highlightNotes.includes(midi), false);
                 whiteContainer.appendChild(el);
-                whiteKeyCount++;
+
+                whiteKeyElements.push({
+                    midi: midi,
+                    element: el,
+                    index: whiteKeyElements.length
+                });
             }
         }
 
-        // Calculate total width for positioning (38px per white key based on our CSS)
-        const totalWidth = whiteKeyCount * 38; 
-        blackContainer.style.width = totalWidth + 'px';
+        // Set the width of the container
+        const totalWidth = whiteKeyElements.length * WHITE_KEY_WIDTH;
+        blackContainer.style.width = `${totalWidth}px`;
 
-        // Then render black keys with correct positioning
-        for (let midi = startMidi; midi <= endMidi; midi++) {
-            const isBlack = this.isBlackKey(midi);
-            if (isBlack) {
-                const el = this.createKeyElement(midi, highlightNotes.includes(midi), isBlack);
+        // Second pass: Render black keys with exact positioning
+        for (let i = 0; i < whiteKeyElements.length - 1; i++) {
+            const currentWhiteKey = whiteKeyElements[i];
+            const nextWhiteKey = whiteKeyElements[i + 1];
 
-                // Calculate position based on white key before it
-                const prevWhiteKey = this.findPreviousWhiteKey(midi, startMidi);
-                const position = this.getBlackKeyPosition(midi, prevWhiteKey, startMidi);
-                el.style.left = position + 'px';
+            // Check if there should be a black key between these white keys
+            if (nextWhiteKey.midi - currentWhiteKey.midi === 2) {
+                // There's a black key between these white keys
+                const blackKeyMidi = currentWhiteKey.midi + 1;
 
-                blackContainer.appendChild(el);
+                if (blackKeyMidi >= startMidi && blackKeyMidi <= endMidi) {
+                    const el = this.createKeyElement(
+                        blackKeyMidi, 
+                        highlightNotes.includes(blackKeyMidi), 
+                        true
+                    );
+
+                    // Position exactly between the two white keys
+                    const position = i * WHITE_KEY_WIDTH + (WHITE_KEY_WIDTH * 0.68);
+                    el.style.left = `${position}px`;
+
+                    blackContainer.appendChild(el);
+                }
             }
         }
-    }
-
-    findPreviousWhiteKey(midiNote, startMidi) {
-        let prev = midiNote - 1;
-        while (prev >= startMidi && this.isBlackKey(prev)) {
-            prev--;
-        }
-        return prev;
-    }
-
-    getBlackKeyPosition(midiNote, prevWhiteKey, startMidi) {
-        // Find how many white keys from the start to the previous white key
-        let whiteKeysBefore = 0;
-        for (let i = startMidi; i <= prevWhiteKey; i++) {
-            if (!this.isBlackKey(i)) {
-                whiteKeysBefore++;
-            }
-        }
-
-        // Calculate position (each white key is 38px wide based on our CSS)
-        const noteInOctave = midiNote % 12;
-        let offset = 25; // Default position (adjusted for the smaller keys)
-
-        // Fine-tune position based on which black key it is
-        switch (noteInOctave) {
-            case 1: offset = 25; break; // C#
-            case 3: offset = 25; break; // D#
-            case 6: offset = 25; break; // F#
-            case 8: offset = 25; break; // G#
-            case 10: offset = 25; break; // A#
-        }
-
-        return (whiteKeysBefore * 38) - offset;
     }
 
     createKeyElement(midiNote, isHighlighted, isBlackKey) {

@@ -102,6 +102,7 @@
     align-items: flex-end;
     justify-content: center;
     padding-bottom: 5px; /* Add a bit of padding at the bottom for the label */
+    /* Removed margin-left to avoid interference with positioning */
 }
 
 .tonika-key.highlighted {
