@@ -100,6 +100,16 @@ main {
 
   color: rgb(222, 222, 222);
 }
+
+.midi-device-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: bold;
+  color: #ddd;
+  margin-bottom: 4px;
+}
+
 /* === Tab Group Styling === */
 .tab-group {
   width: 100%;
