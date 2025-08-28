@@ -7,6 +7,14 @@ class ChordAnalyzer {
     this.chordPatterns = this.initializeChordPatterns();
   }
 
+  // ADDED: Missing findRoot method
+  findRoot(sortedNotes) {
+    // Simple root finding - use the lowest note as root
+    // In a more sophisticated implementation, this could analyze
+    // intervals to determine the actual root based on chord inversions
+    return sortedNotes[0];
+  }
+
   analyzeNotes(midiNotes) {
     if (midiNotes.length < 2) {
       return null; // Need at least 2 notes for a chord

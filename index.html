@@ -119,18 +119,48 @@
             if (tabId === "1" && !_chordSetupDone) {
               _chordSetupDone = true;
 
-              const midiBridge = new MidiApiBridge(midonikaApp);
               const chordAnalyzer = new ChordAnalyzer();
               const chordDisplay = new ChordDisplay("#chord-display");
 
-              midiBridge.subscribe((data) => {
-                console.log("🎼 MIDI Bridge Data:", data);
-                const chord = chordAnalyzer.analyzeNotes(
-                  data.activeNotes || [],
-                );
-                console.log("🎹 Chord Output:", chord);
-                chordDisplay.updateChord(chord);
-              });
+              // Hook directly into the existing piano interface
+              const originalNoteOn = window.PianoInterface.noteOn;
+              const originalNoteOff = window.PianoInterface.noteOff;
+
+              let activeNotes = new Set();
+
+              // Override noteOn to add chord analysis
+              window.PianoInterface.noteOn = function (midiNote) {
+                // Call original function first (keeps piano working)
+                originalNoteOn.call(this, midiNote);
+
+                // Add to active notes and analyze
+                activeNotes.add(midiNote);
+                analyzeCurrentChord();
+              };
+
+              // Override noteOff to update chord analysis
+              window.PianoInterface.noteOff = function (midiNote) {
+                // Call original function first (keeps piano working)
+                originalNoteOff.call(this, midiNote);
+
+                // Remove from active notes and re-analyze
+                activeNotes.delete(midiNote);
+                analyzeCurrentChord();
+              };
+
+              function analyzeCurrentChord() {
+                if (activeNotes.size >= 2) {
+                  const chord = chordAnalyzer.analyzeNotes(
+                    Array.from(activeNotes),
+                  );
+                  console.log("🎵 Chord detected:", chord);
+                  chordDisplay.updateChord(chord);
+                } else {
+                  chordDisplay.clearDisplay();
+                }
+              }
+
+              console.log("✅ Chord analysis connected to piano interface");
             }
           });
         });
