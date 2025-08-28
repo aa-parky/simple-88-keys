@@ -63,8 +63,8 @@ class ZoomedKeyboard {
             }
         }
 
-        // Calculate total width for positioning
-        const totalWidth = whiteKeyCount * 40; // 40px per white key
+        // Calculate total width for positioning (38px per white key based on our CSS)
+        const totalWidth = whiteKeyCount * 38; 
         blackContainer.style.width = totalWidth + 'px';
 
         // Then render black keys with correct positioning
@@ -100,20 +100,20 @@ class ZoomedKeyboard {
             }
         }
 
-        // Calculate position (each white key is 40px wide)
+        // Calculate position (each white key is 38px wide based on our CSS)
         const noteInOctave = midiNote % 12;
-        let offset = 26; // Default right side of white key
+        let offset = 25; // Default position (adjusted for the smaller keys)
 
         // Fine-tune position based on which black key it is
         switch (noteInOctave) {
-            case 1: offset = 26; break; // C#
-            case 3: offset = 26; break; // D#
-            case 6: offset = 26; break; // F#
-            case 8: offset = 26; break; // G#
-            case 10: offset = 26; break; // A#
+            case 1: offset = 25; break; // C#
+            case 3: offset = 25; break; // D#
+            case 6: offset = 25; break; // F#
+            case 8: offset = 25; break; // G#
+            case 10: offset = 25; break; // A#
         }
 
-        return (whiteKeysBefore * 40) - offset;
+        return (whiteKeysBefore * 38) - offset;
     }
 
     createKeyElement(midiNote, isHighlighted, isBlackKey) {
@@ -127,12 +127,11 @@ class ZoomedKeyboard {
             keyEl.classList.add('highlighted');
         }
 
-        if (!isBlackKey || isHighlighted) {
-            const labelEl = document.createElement('span');
-            labelEl.className = 'tonika-key-label';
-            labelEl.textContent = this.formatNoteLabel(noteName, octave);
-            keyEl.appendChild(labelEl);
-        }
+        // Always add labels for both white and black keys
+        const labelEl = document.createElement('span');
+        labelEl.className = 'tonika-key-label';
+        labelEl.textContent = this.formatNoteLabel(noteName, octave);
+        keyEl.appendChild(labelEl);
 
         keyEl.dataset.midi = midiNote;
         keyEl.dataset.note = noteName;
