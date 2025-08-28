@@ -106,61 +106,70 @@
       let midonikaApp = null;
       let _chordSetupDone = false;
 
+      // Function to set up chord detection
+      function setupChordDetection() {
+        if (_chordSetupDone) return; // Prevent duplicate setup
+        _chordSetupDone = true;
+
+        const chordAnalyzer = new ChordAnalyzer();
+        const chordDisplay = new ChordDisplay("#chord-display");
+
+        // Hook directly into the existing piano interface
+        const originalNoteOn = window.PianoInterface.noteOn;
+        const originalNoteOff = window.PianoInterface.noteOff;
+
+        let activeNotes = new Set();
+
+        // Override noteOn to add chord analysis
+        window.PianoInterface.noteOn = function (midiNote) {
+          // Call original function first (keeps piano working)
+          originalNoteOn.call(this, midiNote);
+
+          // Add to active notes and analyze
+          activeNotes.add(midiNote);
+          analyzeCurrentChord();
+        };
+
+        // Override noteOff to update chord analysis
+        window.PianoInterface.noteOff = function (midiNote) {
+          // Call original function first (keeps piano working)
+          originalNoteOff.call(this, midiNote);
+
+          // Remove from active notes and re-analyze
+          activeNotes.delete(midiNote);
+          analyzeCurrentChord();
+        };
+
+        function analyzeCurrentChord() {
+          if (activeNotes.size >= 2) {
+            const chord = chordAnalyzer.analyzeNotes(
+              Array.from(activeNotes),
+            );
+            console.log("🎵 Chord detected:", chord);
+            chordDisplay.updateChord(chord);
+          } else {
+            chordDisplay.clearDisplay();
+          }
+        }
+
+        console.log("✅ Chord analysis connected to piano interface");
+      }
+
       // 🎹 Launch Midonika immediately so it's ready for all tabs
       window.addEventListener("DOMContentLoaded", () => {
         midonikaApp = Midonika.createMidonika("#midonika-container");
+
+        // Set up chord detection immediately since Tab 1 is active by default
+        setupChordDetection();
 
         // 🧠 Tab switch handler
         document.querySelectorAll(".tab-btn").forEach((btn) => {
           btn.addEventListener("click", () => {
             const tabId = btn.dataset.tab;
 
-            // 🎼 Set up chord detection logic when Tab 1 is clicked (only once)
-            if (tabId === "1" && !_chordSetupDone) {
-              _chordSetupDone = true;
-
-              const chordAnalyzer = new ChordAnalyzer();
-              const chordDisplay = new ChordDisplay("#chord-display");
-
-              // Hook directly into the existing piano interface
-              const originalNoteOn = window.PianoInterface.noteOn;
-              const originalNoteOff = window.PianoInterface.noteOff;
-
-              let activeNotes = new Set();
-
-              // Override noteOn to add chord analysis
-              window.PianoInterface.noteOn = function (midiNote) {
-                // Call original function first (keeps piano working)
-                originalNoteOn.call(this, midiNote);
-
-                // Add to active notes and analyze
-                activeNotes.add(midiNote);
-                analyzeCurrentChord();
-              };
-
-              // Override noteOff to update chord analysis
-              window.PianoInterface.noteOff = function (midiNote) {
-                // Call original function first (keeps piano working)
-                originalNoteOff.call(this, midiNote);
-
-                // Remove from active notes and re-analyze
-                activeNotes.delete(midiNote);
-                analyzeCurrentChord();
-              };
-
-              function analyzeCurrentChord() {
-                if (activeNotes.size >= 2) {
-                  const chord = chordAnalyzer.analyzeNotes(
-                    Array.from(activeNotes),
-                  );
-                  console.log("🎵 Chord detected:", chord);
-                  chordDisplay.updateChord(chord);
-                } else {
-                  chordDisplay.clearDisplay();
-                }
-              }
-
-              console.log("✅ Chord analysis connected to piano interface");
+            // If switching to Tab 1, ensure chord detection is set up
+            if (tabId === "1") {
+              setupChordDetection();
             }
           });
         });
