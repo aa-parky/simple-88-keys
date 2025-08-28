@@ -2,12 +2,8 @@
   position: relative;
   display: inline-block;
   background: radial-gradient(circle at 100%, #1a1a1a 0%, #262626 100%);
-
   padding: 15px;
   border-radius: 15px;
-  box-shadow:
-    0 8px 10px rgba(198, 197, 197, 0.4),
-    inset 0 2px 4px rgba(255, 255, 255, 0.1);
   overflow-x: auto;
 }
 
