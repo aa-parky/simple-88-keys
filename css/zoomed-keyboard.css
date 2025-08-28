@@ -1,0 +1,167 @@
+/* Zoomed Keyboard Styles */
+.zoomed-keyboard {
+    background-color: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    color: #ddd;
+}
+
+.zoomed-keyboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.zoomed-keyboard-header h4 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.1em;
+}
+
+.keyboard-info .chord-name {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #4f46e5;
+}
+
+.zoomed-keys-container {
+    background-color: #0f0f0f;
+    border-radius: 6px;
+    padding: 20px;
+    border: 1px solid #333;
+    overflow-x: auto;
+}
+
+.zoomed-keys {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 120px;
+    position: relative;
+    gap: 1px;
+}
+
+.zoomed-key {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    user-select: none;
+}
+
+.zoomed-key.white-key {
+    width: 40px;
+    height: 120px;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 0 0 4px 4px;
+    z-index: 1;
+}
+
+.zoomed-key.black-key {
+    width: 28px;
+    height: 80px;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 0 0 3px 3px;
+    margin-left: -15px;
+    margin-right: -14px;
+    z-index: 2;
+}
+
+.zoomed-key.highlighted {
+    box-shadow: 0 0 15px rgba(79, 70, 229, 0.8);
+    transform: translateY(-2px);
+}
+
+.zoomed-key.white-key.highlighted {
+    background-color: #e0e7ff;
+    border-color: #4f46e5;
+}
+
+.zoomed-key.black-key.highlighted {
+    background-color: #312e81;
+    border-color: #6366f1;
+}
+
+.key-label {
+    font-size: 0.75em;
+    font-weight: 500;
+    padding: 4px;
+    text-align: center;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.white-key .key-label {
+    color: #374151;
+}
+
+.black-key .key-label {
+    color: #e5e7eb;
+}
+
+.highlighted .key-label {
+    color: #4f46e5;
+    font-weight: bold;
+}
+
+.black-key.highlighted .key-label {
+    color: #c7d2fe;
+}
+
+.no-chord-message {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 40px 20px;
+}
+
+.no-chord-message p {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .zoomed-key.white-key {
+        width: 32px;
+        height: 100px;
+    }
+
+    .zoomed-key.black-key {
+        width: 22px;
+        height: 65px;
+        margin-left: -12px;
+        margin-right: -11px;
+    }
+
+    .key-label {
+        font-size: 0.65em;
+    }
+
+    .zoomed-keys-container {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .zoomed-keyboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .keyboard-info .chord-name {
+        font-size: 1.2em;
+    }
+}
+
