@@ -165,7 +165,7 @@
 
         // Override noteOn to add chord analysis
         window.PianoInterface.noteOn = function (midiNote) {
-          // Call original function first (keeps piano working)
+          // Call the original function first (keeps piano working)
           originalNoteOn.call(this, midiNote);
 
           // Add to active notes and analyze
@@ -175,7 +175,7 @@
 
         // Override noteOff to update chord analysis
         window.PianoInterface.noteOff = function (midiNote) {
-          // Call original function first (keeps piano working)
+          // Call the original function first (keeps piano working)
           originalNoteOff.call(this, midiNote);
 
           // Remove from active notes and re-analyze
